@@ -1,24 +1,21 @@
-import subprocess
+
+import yt_dlp
 
 def download_youtube_video():
     url = input("Enter the YouTube video URL: ").strip()
 
-    try:
-        print("Downloading highest quality video...")
+    print("Downloading highest quality video...")
 
-        command = [
-            "yt-dlp",
-            "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]",
-            "--merge-output-format", "mp4",
-            "--no-playlist",
-            url
-        ]
+    ydl_opts = {
+        'format': 'bestvideo+bestaudio/best',
+        'merge_output_format': 'mp4',
+        'noplaylist': True
+    }
 
-        subprocess.run(command, check=True)
-        print("✅ Download completed successfully!")
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
 
-    except subprocess.CalledProcessError as e:
-        print(f"❌ An error occurred while downloading: {e}")
+    print("✅ Download completed successfully!")
 
 if __name__ == "__main__":
     download_youtube_video()
